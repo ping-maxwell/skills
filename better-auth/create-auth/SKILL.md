@@ -1,55 +1,56 @@
 ---
-name: Create Auth Skill
-description: A skill to create auth service for new applications.
+name: create-auth
+description: Create or integrate Better Auth for TypeScript/JavaScript apps.
 ---
 
-# Create an auth layer for your TypeScript/JavaScript applications
+# Create an auth layer for TypeScript/JavaScript apps
 
 ## Overview
 
-A user could ask you to create authentication and authorization layers for their TypeScript/JavaScript applications.
+Use this skill when a user wants authentication and authorization in a new or existing TypeScript/JavaScript app.
 
-## Decision Tree: Choosing Your Approach
+## When to use
 
-```
-User task -> Do we start from a empty project?
-    ├─ Yes → Create a new project with authentication scaffolding
-    │         ├─ Choose web framework: React, Next.js, Express, etc.
-    │         ├─ Select database: PostgreSQL, MongoDB, etc.
-    │         ├─ Set up auth using @better-auth/cli
-    │         └─ Customize auth flows as per user requirements, like OAuth, JWT, Organization, Admin...
-    │
-    └─ No → Is the existing project already have authentication?
-              ├─ Yes → Review existing auth implementation
-              │         ├─ Identify gaps or improvements needed
-              │         ├─ Read document for missing features from `better-auth`
-              │         └─ Test and validate the updated auth flows
-              │
-              └─ No → Analyze the existing project structure
-                        ├─ Choose appropriate auth strategy
-                        ├─ Integrate `better-auth` into the existing codebase
-                        └─ Implement and test the new authentication flows
-```
+- The app has no auth and needs a fresh Better Auth setup
+- The app has auth but needs fixes, upgrades, or new flows
+- The user wants guidance on choosing framework, database, or auth strategy
+
+## Inputs to gather
+
+- Project type: new or existing
+- Framework: React, Next.js, Express, etc.
+- Database: PostgreSQL, MySQL, SQLite, MongoDB, etc.
+- Auth needs: email/password, OAuth, magic links, orgs, admin roles, JWT, etc.
+- Deployment base URL and environment constraints
+
+## Steps
+
+1. Determine if the project is new or existing.
+2. If new, scaffold the project and select framework + database.
+3. If existing, review current auth and identify gaps.
+4. Configure Better Auth using the appropriate adapter and plugins.
+5. Implement server auth config and client auth client.
+6. Validate the flows (login, logout, session, provider callbacks).
 
 ## Example: Next.js app with Better Auth
 
-You can read [templates/nextjs](https://github.com/better-auth/examples/tree/main/nextjs-mcp)
-to see a complete example of a Next.js app integrated with Better Auth.
+Reference implementation:
+- https://github.com/better-auth/examples/tree/main/nextjs-mcp
 
-In this example, you can see the most two essential files, auth.ts and auth-client.ts.
+Key files:
 
 ```ts
-import { betterAuth } from 'better-auth'
-import Database from 'better-sqlite3'
+import { betterAuth } from "better-auth";
+import Database from "better-sqlite3";
 
 export const auth = betterAuth({
-  database: new Database('./auth.db'),
-  baseURL: 'http://localhost:3000',
+  database: new Database("./auth.db"),
+  baseURL: "http://localhost:3000",
   plugins: [],
   emailAndPassword: {
-    enabled: true
-  }
-})
+    enabled: true,
+  },
+});
 ```
 
 ```ts
@@ -58,24 +59,18 @@ import { createAuthClient } from "better-auth/react";
 export const authClient = createAuthClient();
 ```
 
-In this example, it doesn't include any plugins, but you can easily add plugins by importing them from
-`better-auth/plugins` and adding them to the `plugins` array in the `betterAuth` configuration.
-
-Also you will need to update auth client to make sure client-side plugins are included.
-
-You can refer to the [plugins](https://www.better-auth.com/docs/concepts/plugins) for more details on how
-to set up and customize your authentication flows.
+Add plugins via `better-auth/plugins`, and ensure client-side plugins are also configured.
 
 ## Dependencies
 
-To use better-auth, install these dependencies only if they aren't already present in package.json:
+Install if missing:
 
 ```bash
 npm install better-auth
 ```
 
-## Advanced features
+## References
 
-**@better-auth/cli**: See [cli](https://www.better-auth.com/docs/concepts/cli) for details on how to use the CLI tool.
-**Examples**: See [examples](https://github.com/better-auth/examples) for complete example projects using better-auth,
-including astro, browser-extension, next.js, nuxt, svelte and tanstack.
+- https://www.better-auth.com/docs/concepts/plugins
+- https://www.better-auth.com/docs/concepts/cli
+- https://github.com/better-auth/examples
